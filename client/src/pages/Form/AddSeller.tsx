@@ -7,42 +7,43 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const FormLayout = () => {
+export default function AddSeller() {
 
-  let navigate = useNavigate();
+let navigate = useNavigate();
 
 const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password:'',
-    designation: ''
+  designation: '',
+    contractor:''
 });
   
-  const [success, setSuccess] = useState(false); 
+  const [success, setSuccess] = useState(false); // State to track successful response
     const [qrCodeValue, setQRCodeValue] = useState('');
   
    const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
    };
+  console.log('zzzzzzzzzzz',formData)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.firstName === '' || formData.lastName === '' || formData.email === '' || formData.password === '' || formData.designation === '') {
-      alert(`Any of the fields is empty`)
-    }
-    else {
-     try {
-      const response = await axios.post('http://localhost:3000/register', formData);
+    try {
+      const response = await axios.post('http://localhost:3000/registerseller', formData);
+      if (response) {
+       navigate('/qrcode')
+            }
     } catch (error) {
       console.error('Error:', error); 
-    } 
     }
   };
 
   return (
-    <DefaultLayout>
+    <div>
+       <DefaultLayout>
       {/* <Breadcrumb pageName="Form Layout" /> */}
 
       <div style={{
@@ -56,7 +57,7 @@ const [formData, setFormData] = useState({
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Register Invigilator
+                Register Seller 
               </h3>
             </div>
             <form style={{
@@ -133,6 +134,19 @@ const [formData, setFormData] = useState({
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Contractor
+                  </label>
+                  <input
+                    type="text"
+                    name="contractor"
+                    value={formData.contractor}
+                    onChange={handleChange}
+                    placeholder="Enter your first name"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
 
                 <button onClick={handleSubmit} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                   Add User
@@ -147,7 +161,6 @@ const [formData, setFormData] = useState({
         
       </div>
     </DefaultLayout>
-  );
-};
-
-export default FormLayout;
+    </div>
+  )
+}

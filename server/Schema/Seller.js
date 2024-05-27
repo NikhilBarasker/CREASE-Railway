@@ -15,7 +15,10 @@ const model = new mongoose.Schema({
   },
   designation: {
     type: String,
-  }
+  },
+  contractor: {
+    type: String,
+  },
 });
 
-module.exports = mongoose.model("Info", model);
+module.exports = mongoose.model("Seller", model);

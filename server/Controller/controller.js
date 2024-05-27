@@ -1,4 +1,6 @@
 const Info = require("../Schema/UserInfo");
+const Contractor = require("../Schema/Contractor");
+const Seller = require("../Schema/Seller");
 const bcrypt = require("bcryptjs");
 
 const loginUser = async (req, res) => {
@@ -52,11 +54,12 @@ const verifyUser = async (req, res) => {
 
 
 const registerUser = async (req, res) => {
-  const { name, gender, mobile, email, password } = req.body;
+  const { firstName,lastName, email, password ,designation} = req.body;
 console.log('rrrrrrr',req.body)
   try {
+   
     const existingUser = await Info.findOne({ email });
-
+     
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
@@ -64,13 +67,72 @@ console.log('rrrrrrr',req.body)
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new Info({
-      name,
-      gender,
-      mobile,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
+      designation,
     });
+console.log("hi");
+    await newUser.save();
 
+    res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+const registerContractor = async (req, res) => {
+  const { firstName,lastName, email, password ,designation,invigilator,qrcode} = req.body;
+console.log('rrrrrrr',req.body)
+  try {
+   
+    const existingUser = await Info.findOne({ email });
+     console.log('hi')
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new Contractor({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      designation,
+      invigilator,
+      qrcode
+    });
+console.log("hi");
+    await newUser.save();
+
+    res.status(201).json({ message: "User created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+const registerSeller = async (req, res) => {
+  const { firstName,lastName, email, password ,designation,contractor} = req.body;
+console.log('rrrrrrr',req.body)
+  try {
+   
+    const existingUser = await Info.findOne({ email });
+     
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new Seller({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      designation,
+      contractor:''
+    });
+console.log("hi");
     await newUser.save();
 
     res.status(201).json({ message: "User created successfully" });
@@ -118,10 +180,35 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const saveQRCode = async (req, res) => {
+  const { qrcode } = req.body;
+
+  try {
+    // Find the contractor with the given QR code
+    const contractor = await Contractor.findOne({ qrcode });
+
+    if (!contractor) {
+      return res.status(404).json({ message: "Contractor not found" });
+    }
+
+    // Update the contractor document with the new QR code value
+    contractor.qrcode = qrcode;
+
+    await contractor.save();
+
+    res.status(200).json({ message: "QR Code saved successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 module.exports = {
   verifyUser,
   loginUser,
   registerUser,
+  registerContractor,
+  registerSeller,
   updateUser,
   deleteUser,
+  saveQRCode
 };

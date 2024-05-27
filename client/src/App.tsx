@@ -17,6 +17,9 @@ import Login from './pages/Login'
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import PrivateRoutes from './components/PrivateRoutes';
+import QrCode from './pages/Form/QrCode';
+import AddContractor from './pages/Form/AddContractor';
+import AddSeller from './pages/Form/AddSeller';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -75,6 +78,15 @@ function App() {
           }
         />
         <Route
+          path="/qrcode"
+          element={
+            <>
+              <PageTitle title="Profile" />
+              <QrCode />
+            </>
+          }
+        />
+        <Route
           path="/AddInvigilator"
           element={
             <>
@@ -89,7 +101,7 @@ function App() {
           element={
             <>
               <PageTitle title="Form Layout" />
-              <FormLayout />
+              <AddContractor />
             </>
           }
           />
@@ -98,7 +110,7 @@ function App() {
           element={
             <>
               <PageTitle title="Form Layout" />
-              <FormLayout />
+              <AddSeller />
             </>
           }
         />

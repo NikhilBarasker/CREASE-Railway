@@ -1,100 +1,83 @@
-// import { Link } from 'react-router-dom';
-// import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-// import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
-// import DefaultLayout from '../layout/DefaultLayout';
-import { useState } from 'react';
-import axios from 'axios';
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+export default function Login() {
 
-const Login = () => {
+  let navigate = useNavigate()
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password:'',
-});
-  
-   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-   };
-  console.log('zzzzzzzzzzz',formData)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/register', formData);
-      if (response) {
-        alert(`Data Saved Successfully`);
-      }
-    } catch (error) {
-      console.error('Error:', error); // Handle error
-    }
-  };
+  const handleClick = () => {
+  navigate('/dashboard')
+}
 
   return (
-    <>
-      {/* <Breadcrumb pageName="Form Layout" /> */}
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems:'center'
-      }} className="grid grid-cols-1 gap-9 sm:grid-cols-2">
-        <div className="flex flex-col gap-9">
-          {/* <!-- Contact Form --> */}
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Contact Form
-              </h3>
-            </div>
-            <form style={{
-              
-            }} action="#">
-              <div className="p-6.5" >
-                <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
-                </div>
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Email <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your first name"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Password <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Enter your password"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-
-                <button onClick={handleSubmit} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Login
-                </button>
-              </div>
-            </form>
-          </div>
+    <div>
+      <form className="space-y-6 font-[sans-serif] max-w-lg mx-auto mt-[200px]">
+        <div className="relative flex items-center">
+          <input
+            type="email"
+            placeholder="Enter Email"
+            className="px-2 py-3 bg-white text-black w-full text-sm border-b-2 focus:border-blue-500 outline-none"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#bbb"
+            stroke="#bbb"
+            className="w-[18px] h-[18px] absolute right-4"
+            viewBox="0 0 682.667 682.667"
+          >
+            <defs>
+              <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                <path d="M0 512h512V0H0Z" data-original="#000000"></path>
+              </clipPath>
+            </defs>
+            <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
+              <path
+                fill="none"
+                stroke-miterlimit="10"
+                stroke-width="40"
+                d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
+                data-original="#000000"
+              ></path>
+              <path
+                d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
+                data-original="#000000"
+              ></path>
+            </g>
+          </svg>
         </div>
 
-        <div className="flex flex-col gap-9">
-        </div> 
-      </div>
-    </>
-  );
-};
+        <div className="relative flex items-center">
+          <input
+            type="password"
+            placeholder="Enter Password"
+            className="px-2 py-3 bg-white text-black w-full text-sm border-b-2 focus:border-blue-500 outline-none"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#bbb"
+            stroke="#bbb"
+            className="w-[18px] h-[18px] absolute right-4 cursor-pointer"
+            viewBox="0 0 128 128"
+          >
+            <path
+              d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
+              data-original="#000000"
+            ></path>
+          </svg>
+        </div>
 
-export default Login; 
+        <div className="flex">
+          <input type="checkbox" className="w-4" />
+          <label className="text-sm ml-4 ">Remember me</label>
+        </div>
+
+        <button
+          onClick={()=>handleClick()}
+          type="button"
+          className="!mt-8 px-8 py-2.5 bg-blue-500 text-sm text-white hover:bg-blue-600 rounded-sm"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+}
