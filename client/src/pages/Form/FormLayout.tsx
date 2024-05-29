@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { UploadButton } from "@bytescale/upload-widget-react";
 import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,18 +10,16 @@ import axios from 'axios';
 
 const FormLayout = () => {
 
-  let navigate = useNavigate();
+  const [profilePic, setProfilePic] = useState("");
 
 const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password:'',
-    designation: ''
+  designation: '',
+  profilePic:'',
 });
-  
-  const [success, setSuccess] = useState(false); 
-    const [qrCodeValue, setQRCodeValue] = useState('');
   
    const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,12 +33,18 @@ const [formData, setFormData] = useState({
     }
     else {
      try {
-      const response = await axios.post('http://localhost:3000/register', formData);
+      const response = await axios.post('http://localhost:3000/registerinvigilator', formData);
     } catch (error) {
       console.error('Error:', error); 
     } 
     }
   };
+  const options = {
+        apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
+        maxFileCount: 1
+  };
+  formData.profilePic = profilePic;
+  console.log('xxxx', formData);
 
   return (
     <DefaultLayout>
@@ -133,7 +138,23 @@ const [formData, setFormData] = useState({
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
-
+<div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload Profile Pic
+                    </label>
+                      <UploadButton
+                          options={options}
+                          onComplete={(files) =>
+                            setProfilePic(files.map((x) => x.fileUrl).join("\n"))
+                          }
+                        >
+    {({onClick}) =>
+      <button onClick={onClick}>
+        Upload a file...
+      </button>
+    }
+  </UploadButton>
+                  </div>
                 <button onClick={handleSubmit} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                   Add User
                 </button>

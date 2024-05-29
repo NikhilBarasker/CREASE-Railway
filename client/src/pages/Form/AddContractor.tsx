@@ -2,16 +2,15 @@ import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { UploadButton } from "@bytescale/upload-widget-react";
 import QRCode from 'qrcode.react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function AddContractor() {
-
-  const [success, setSuccess] = useState(false); // State to track successful response
+  const [profilePic, setProfilePic] = useState("");
+  const [success, setSuccess] = useState(false);
   const [qrCodeValue, setQRCodeValue] = useState('');
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,20 +18,19 @@ export default function AddContractor() {
     password: '',
     designation: '',
     invigilator: '',
-    qrcode: ''
+    qrcode: '',
+    profilePic:'',
   });
 
-  let navigate = useNavigate();
+  const [generatedData, setGeneratedData] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Generate QR code value
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     const charactersLength = characters.length;
@@ -40,33 +38,33 @@ export default function AddContractor() {
       const randomIndex = Math.floor(Math.random() * charactersLength);
       result += characters.charAt(randomIndex);
     }
-
-    // Set the generated QR code in the form data
     const updatedFormData = { ...formData, qrcode: result };
     setQRCodeValue(result);
+    setGeneratedData(updatedFormData);
+    setSuccess(true); 
+    setProfilePic(profilePic);
+  };
 
+  const handleSave = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/registercontractor', updatedFormData);
-      if (response) {
-        setSuccess(true);
+      if (generatedData) {
+        
+        const response = await axios.post('http://localhost:3000/registercontractor', generatedData);
+        if (response) {
+          console.log(response);
+          setSuccess(false); 
+        }
       }
     } catch (error) {
       console.error('Error:', error);
-      setSuccess(false); // Reset success state on error
     }
   };
-
-  const saveQrCode = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/saveqrcode', { qrcode: qrCodeValue });
-      if (response) {
-        alert('QR Code saved successfully!');
-      }
-    } catch (error) {
-      console.error('Error saving QR code:', error);
-    }
+const options = {
+        apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
+        maxFileCount: 1
   };
-
+  formData.profilePic = profilePic;
+  console.log('xxxx', formData);
   return (
     <div>
       <DefaultLayout>
@@ -174,12 +172,29 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload Profile Pic
+                    </label>
+                      <UploadButton
+                          options={options}
+                          onComplete={(files) =>
+                            setProfilePic(files.map((x) => x.fileUrl).join("\n"))
+                          }
+                        >
+    {({onClick}) =>
+      <button onClick={onClick}>
+        Upload a file...
+      </button>
+    }
+  </UploadButton>
+                  </div>
+            
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
                   >
-                    Add User
+                    Generate QR Code
                   </button>
                 </div>
               </form>
@@ -189,9 +204,9 @@ export default function AddContractor() {
 
         {success && qrCodeValue && (
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <QRCode style={{ margin: '10px 0 10px 395px' }} value={qrCodeValue} />
+            <QRCode style={{ margin: '10px 0' }} value={qrCodeValue} />
             <button
-              onClick={saveQrCode}
+              onClick={handleSave}
               style={{
                 margin: '10px',
                 width: '150px',
@@ -201,7 +216,7 @@ export default function AddContractor() {
                 backgroundColor: 'white'
               }}
             >
-              Save the QrCode
+              Save to Database
             </button>
           </div>
         )}
