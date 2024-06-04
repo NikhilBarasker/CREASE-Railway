@@ -1,105 +1,257 @@
-import { Product } from '../../types/product';
-import ProductOne from '../../images/product/product-01.png';
-import ProductTwo from '../../images/product/product-02.png';
-import ProductThree from '../../images/product/product-03.png';
-import ProductFour from '../../images/product/product-04.png';
+import { BRAND } from '../../types/brand';
+import BrandOne from '../../images/brand/brand-01.svg';
+import { ImWrench } from "react-icons/im";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import DefaultLayout from '../../layout/DefaultLayout';
+import { useLocation } from 'react-router-dom';
 
-const productData: Product[] = [
+const brandData2: BRAND[] = [
   {
-    image: ProductOne,
-    name: 'Apple Watch Series 7',
-    category: 'Electronics',
-    price: 296,
-    sold: 22,
-    profit: 45,
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
+  },
+]
+
+const brandData: BRAND[] = [
+  {
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
   },
   {
-    image: ProductTwo,
-    name: 'Macbook Pro M1',
-    category: 'Electronics',
-    price: 546,
-    sold: 12,
-    profit: 125,
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
   },
   {
-    image: ProductThree,
-    name: 'Dell Inspiron 15',
-    category: 'Electronics',
-    price: 443,
-    sold: 64,
-    profit: 247,
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
   },
   {
-    image: ProductFour,
-    name: 'HP Probook 450',
-    category: 'Electronics',
-    price: 499,
-    sold: 72,
-    profit: 103,
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
+  },
+  {
+    logo: BrandOne,
+    brandname: 'Google',
+    name: 'Mukesh',
+    mobile: 9898989898,
+    aadhar: 1234567892,
+    userid: 590,
+    password: "abc#123",
+
   },
 ];
 
 const TableTwo = () => {
+
+ const location = useLocation();
+  const { invigilators } = location.state;
+  console.log('cccccc',typeof invigilators);
+
+
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="py-6 px-4 md:px-6 xl:px-7.5">
-        <h4 className="text-xl font-semibold text-black dark:text-white">
-          Top Products
-        </h4>
-      </div>
+    <DefaultLayout>
+      <div style={{
+      overflowX:'auto',
+      width:'1000px'
+    }} className="  rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      <div className="flex flex-col">
+        <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+       Invigilator
+      </h4>
+        <div className="grid grid-cols-7 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-7">
+          <div className=" xl:p-5">
+            
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+            LOGO
+            </h5>
+          </div>
+          <div className="p-2.5 text-center xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Name
+            </h5>
+          </div>  
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+            Email
+            </h5>
+          </div>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Mobile
+            </h5>
+          </div>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Action
+            </h5>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Sold</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Profit</p>
-        </div>
-      </div>
-
-      {productData.map((product, key) => (
-        <div
-          className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
-          key={key}
-        >
-          <div className="col-span-3 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="h-12.5 w-15 rounded-md">
-                <img src={product.image} alt="Product" />
+        {invigilators.map((user,key) => (
+          <div
+            className={`grid grid-cols-7 sm:grid-cols-7 ${
+              key === brandData2.length - 1
+                ? ''
+                : 'border-b border-stroke dark:border-strokedark'
+            }`}
+            key={key}
+          >
+            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+              <div className="flex-shrink-0">
+                <img src={user.profilePic} alt="Brand" />
               </div>
-              <p className="text-sm text-black dark:text-white">
-                {product.name}
-              </p>
+              {/* <p className="hidden text-black dark:text-white sm:block">
+                {brand.brandname}
+              </p> */}
+            </div>
+
+            <div className="flex items-center justify-center p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{user.firstName}{user.lastName}</p>
+            </div>
+
+            <div className="flex items-center justify-center p-2.5 xl:p-5">
+              <p className="text-meta-3">{user.email}</p>
+            </div>
+
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-black dark:text-white">{user.mobile}</p>
+            </div>
+
+            {/* <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-meta-5">{brand.userid}</p>
+            </div>
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-meta-5">{brand.password}</p>
+            </div> */}
+            <div className=" items-center justify-center p-2.5 sm:flex xl:p-5 flex gap-[10px]">
+            <button type="button"
+    className="px-6 py-2.5 rounded text-white text-sm tracking-wider font-semibold border-none outline-none bg-green-600 hover:bg-green-700 active:bg-green-600"><ImWrench /></button>
+    <button type="button"
+    className="px-6 py-2.5 rounded text-white text-sm tracking-wider font-semibold border-none outline-none bg-red-600 hover:bg-red-700 active:bg-red-600"><RiDeleteBin5Fill /></button>
             </div>
           </div>
-          <div className="col-span-2 hidden items-center sm:flex">
-            <p className="text-sm text-black dark:text-white">
-              {product.category}
-            </p>
+        ))}
+      </div>
+      <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
+       Contractors
+      </h4>
+
+      <div className="flex flex-col">
+        <div className="grid grid-cols-7 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-7">
+          <div className=" xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+            LOGO
+            </h5>
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
-              ${product.price}
-            </p>
+          <div className="p-2.5 text-center xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Name
+            </h5>
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">{product.sold}</p>
+          <div className="p-2.5 text-center xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Mobile Number
+            </h5>
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">${product.profit}</p>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Aadhar number
+            </h5>
+          </div>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              UserId
+            </h5>
+          </div>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Password
+            </h5>
+          </div>
+          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">
+              Action
+            </h5>
           </div>
         </div>
-      ))}
+
+        {brandData.map((brand, key) => (
+          <div
+            className={`grid grid-cols-7 sm:grid-cols-7 ${
+              key === brandData.length - 1
+                ? ''
+                : 'border-b border-stroke dark:border-strokedark'
+            }`}
+            key={key}
+          >
+            <div className="flex items-center gap-3 p-2.5 xl:p-5">
+              <div className="flex-shrink-0">
+                <img src={brand.logo} alt="Brand" />
+              </div>
+              {/* <p className="hidden text-black dark:text-white sm:block">
+                {brand.brandname}
+              </p> */}
+            </div>
+
+            <div className="flex items-center justify-center p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{brand.name}Mukesh</p>
+            </div>
+
+            <div className="flex items-center justify-center p-2.5 xl:p-5">
+              <p className="text-meta-3">{brand.mobile}</p>
+            </div>
+
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-black dark:text-white">{brand.aadhar}</p>
+            </div>
+
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-meta-5">{brand.userid}</p>
+            </div>
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+              <p className="text-meta-5">{brand.password}</p>
+            </div>
+            <div className=" items-center justify-center p-2.5 sm:flex xl:p-5 flex gap-[10px]">
+            <button type="button"
+    className="px-6 py-2.5 rounded text-white text-sm tracking-wider font-semibold border-none outline-none bg-green-600 hover:bg-green-700 active:bg-green-600"><ImWrench /></button>
+    <button type="button"
+    className="px-6 py-2.5 rounded text-white text-sm tracking-wider font-semibold border-none outline-none bg-red-600 hover:bg-red-700 active:bg-red-600"><RiDeleteBin5Fill /></button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
+    </DefaultLayout>
   );
 };
 

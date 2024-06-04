@@ -7,6 +7,8 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import axios from 'axios';
 
+const baseUrl = process.env.API_BASE_URL;
+
 export default function AddSeller() {
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
@@ -49,7 +51,7 @@ export default function AddSeller() {
     try {
       if (generatedData) {
         
-        const response = await axios.post('http://localhost:3000/registerseller', generatedData);
+        const response = await axios.post(baseUrl+'/registerseller', generatedData);
         if (response) {
           console.log(response);
           setSuccess(false); 

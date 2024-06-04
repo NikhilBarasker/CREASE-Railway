@@ -5,7 +5,6 @@ import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
-// import Calendar from './pages/Calendar';
 import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
@@ -17,9 +16,11 @@ import Login from './pages/Login'
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import PrivateRoutes from './components/PrivateRoutes';
-import QrCode from './pages/Form/QrCode';
 import AddContractor from './pages/Form/AddContractor';
 import AddSeller from './pages/Form/AddSeller';
+import EditInvigilator from './pages/Form/EditInvigilator';
+import TableTwo from './components/Tables/TableTwo';
+import Admin from './pages/Form/Admin';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -77,21 +78,22 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/qrcode"
-          element={
-            <>
-              <PageTitle title="Profile" />
-              <QrCode />
-            </>
-          }
-        />
+        
         <Route
           path="/AddInvigilator"
           element={
             <>
               <PageTitle title="Form Layout" />
               <FormLayout />
+            </>
+          }
+        />
+        <Route
+          path="/EditInvigilator"
+          element={
+            <>
+              <PageTitle title="Form Layout" />
+              <EditInvigilator />
             </>
           }
         />
@@ -102,6 +104,15 @@ function App() {
             <>
               <PageTitle title="Form Layout" />
               <AddContractor />
+            </>
+          }
+          />
+        <Route
+          path="/admin"
+          element={
+            <>
+              <PageTitle title="Form Layout" />
+              <Admin />
             </>
           }
           />
@@ -120,6 +131,15 @@ function App() {
             <>
               <PageTitle title="Tables" />
               <Tables />
+            </>
+          }
+        />
+        <Route
+          path="/tabletwo"
+          element={
+            <>
+              <PageTitle title="TableTwo" />
+              <TableTwo />
             </>
           }
         />

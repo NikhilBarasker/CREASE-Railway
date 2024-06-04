@@ -8,48 +8,76 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const baseUrl = process.env.API_BASE_URL;
+
 const FormLayout = () => {
 
   const [profilePic, setProfilePic] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [qrCodeValue, setQRCodeValue] = useState('');
+  const [formData, setFormData] = useState({
+    fname: '',
+    dob: '',
+    mobile: '',
+    profilePic:'',
+    aadhar:'',
+    aadharCard: '',
+    policeVarificationDate: '',
+    policeVarificationDocument: '',
+    medicalValidityDate: '',
+    madicalValidityDocument: '',
+    validityAuthority: '',
+    qrCodeValue:'',
+  });
 
-const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password:'',
-  designation: '',
-  profilePic:'',
-});
+  const [generatedData, setGeneratedData] = useState(null);
   
-   const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-   };
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.firstName === '' || formData.lastName === '' || formData.email === '' || formData.password === '' || formData.designation === '') {
-      alert(`Any of the fields is empty`)
+  const generateQRCode = (e) => {
+    e.preventDefault()
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * charactersLength);
+      result += characters.charAt(randomIndex);
     }
-    else {
-     try {
-      const response = await axios.post('http://localhost:3000/registerinvigilator', formData);
-    } catch (error) {
-      console.error('Error:', error); 
-    } 
+    setQRCodeValue(result);
+    const updatedFormData = { ...formData, qrcode: result };
+    setGeneratedData(updatedFormData);
+    setSuccess(true); 
+    setProfilePic(profilePic);
+    console.log('Generated QR Code:', result);
+  };
+
+  const handleSave = async () => {
+    if (Object.values(formData).some(value => value === '')) {
+      console.log(formData);
+      alert('Any of the fields is empty');
+    } else {
+      try {
+        console.log('Submitting formData:', generatedData);
+        const response = await axios.post(baseUrl+'/invigilator/registerinvigilator', generatedData);
+        alert('Data saved successfully');
+      } catch (error) {
+        console.error('Error:', error); 
+      }
     }
   };
+
   const options = {
-        apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
-        maxFileCount: 1
+    apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
+    maxFileCount: 1
   };
+
   formData.profilePic = profilePic;
-  console.log('xxxx', formData);
 
   return (
     <DefaultLayout>
-      {/* <Breadcrumb pageName="Form Layout" /> */}
-
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -57,16 +85,13 @@ const [formData, setFormData] = useState({
         alignItems:'center'
       }} className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <div className="flex flex-col gap-9">
-          {/* <!-- Contact Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
                 Register Invigilator
               </h3>
             </div>
-            <form style={{
-              
-            }} action="#">
+            <form style={{}} action="#">
               <div className="p-6.5" >
                 <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                   <div className="w-full xl:w-1/2">
@@ -75,97 +100,161 @@ const [formData, setFormData] = useState({
                     </label>
                     <input
                       type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    placeholder="Enter your first name"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      name="fname"
+                      value={formData.fname}
+                      onChange={handleChange}
+                      placeholder="Enter your name"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      Last name
+                      Date of Birth
                     </label>
                     <input
-                      type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    placeholder="Enter your first name"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      type="date"
+                      name="dob"  // Corrected name attribute
+                      value={formData.dob}
+                      onChange={handleChange}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Mobile Number
+                    </label>
+                    <input
+                      type="number"
+                      name="mobile"  // Corrected name attribute
+                      value={formData.mobile}
+                      onChange={handleChange}
+                      placeholder="Enter your mobile number"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
                 </div>
-
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Email <span className="text-meta-1">*</span>
+                    Aadhar number <span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="aadhar"
+                    value={formData.aadhar}
+                    onChange={handleChange}
+                    placeholder="Enter your Aadhar number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Aadhar Card <span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="aadharCard"
+                    value={formData.aadharCard}
+                    onChange={handleChange}
+                    placeholder="Enter your Aadhar number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Police Varification Document <span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="policeVarificationDocument"
+                    value={formData.policeVarificationDocument}
+                    onChange={handleChange}
+                    placeholder="Enter your Aadhar number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Medical Varification Document<span className="text-meta-1">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="madicalValidityDocument"
+                    value={formData.madicalValidityDocument}
+                    onChange={handleChange}
+                    placeholder="Enter your Aadhar number"
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="w-full xl:w-1/2">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Police Varification Date
+                  </label>
+                  <input
+                    type="date"
+                    name="policeVarificationDate"
+                    value={formData.policeVarificationDate}
+                    onChange={handleChange}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="w-full xl:w-1/2">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Medical validity
+                  </label>
+                  <input
+                    type="date"
+                    name="medicalValidityDate"  // Corrected name attribute
+                    value={formData.medicalValidityDate}
+                    onChange={handleChange}
+                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Validity of Authority
                   </label>
                   <input
                     type="text"
-                    name="email"
-                    value={formData.email}
+                    name="validityAuthority"
+                    value={formData.validityAuthority}
                     onChange={handleChange}
-                    placeholder="Enter your first name"
+                    placeholder="Enter validity Authority"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
-                    Password <span className="text-meta-1">*</span>
+                    Upload Profile Pic
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Enter your password"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
+                  <UploadButton
+                    options={options}
+                    onComplete={(files) =>
+                      setProfilePic(files.map((x) => x.fileUrl).join("\n"))
+                    }
+                  >
+                    {({ onClick }) =>
+                      <button onClick={onClick}>
+                        Upload a file...
+                      </button>
+                    }
+                  </UploadButton>
                 </div>
-
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Designation
-                  </label>
-                  <input
-                    type="text"
-                    name="designation"
-                    value={formData.designation}
-                    onChange={handleChange}
-                    placeholder="Enter your first name"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-<div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Upload Profile Pic
-                    </label>
-                      <UploadButton
-                          options={options}
-                          onComplete={(files) =>
-                            setProfilePic(files.map((x) => x.fileUrl).join("\n"))
-                          }
-                        >
-    {({onClick}) =>
-      <button onClick={onClick}>
-        Upload a file...
-      </button>
-    }
-  </UploadButton>
+                  <button onClick={generateQRCode} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+                  Generate Qr Code
+                </button>
+                {success && (
+                  <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                    <QRCode value={qrCodeValue} />
                   </div>
-                <button onClick={handleSubmit} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                  Add User
+                )}
+                <button onClick={handleSave} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-4">
+                  Save to Database
                 </button>
               </div>
             </form>
           </div>
         </div>
-
-        <div className="flex flex-col gap-9">
-        </div> 
-        
+        <div className="flex flex-col gap-9"></div>
       </div>
     </DefaultLayout>
   );

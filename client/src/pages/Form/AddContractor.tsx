@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
@@ -7,19 +8,26 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import axios from 'axios';
 
+const baseUrl = process.env.API_BASE_URL;
+
 export default function AddContractor() {
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
   const [qrCodeValue, setQRCodeValue] = useState('');
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    designation: '',
-    invigilator: '',
+    agency: '',
+    typeofcontract: '',
+    ContractperiodFrom: '',
+    ContractperiodTo: '',
+    authority: '',
+    Licenseename: '',
+    Licenseecontactdetails: '',
+    VendorsPermitted: '',
+    IsStationService: '',
+    StationName: '',
+    PFPermitted: '',
     qrcode: '',
-    profilePic:'',
+    profilePic: '',
   });
 
   const [generatedData, setGeneratedData] = useState(null);
@@ -48,8 +56,8 @@ export default function AddContractor() {
   const handleSave = async () => {
     try {
       if (generatedData) {
-        
-        const response = await axios.post('http://localhost:3000/registercontractor', generatedData);
+        console.log("generatedData : ", generatedData);
+        const response = await axios.post(baseUrl+'/contractor/registercontractor', generatedData);
         if (response) {
           console.log(response);
           setSuccess(false); 
@@ -59,12 +67,15 @@ export default function AddContractor() {
       console.error('Error:', error);
     }
   };
-const options = {
-        apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
-        maxFileCount: 1
+
+  const options = {
+    apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
+    maxFileCount: 1
   };
+
   formData.profilePic = profilePic;
   console.log('xxxx', formData);
+
   return (
     <div>
       <DefaultLayout>
@@ -90,85 +101,136 @@ const options = {
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        First name
+                        Contract allotting Agency
                       </label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                      <select
+                        name="agency"
+                        value={formData.agency}
                         onChange={handleChange}
-                        placeholder="Enter your first name"
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      />
+                      >
+                        <option value="" disabled>Contract Allocating Agency</option>
+                        <option value="Railway">Railway</option>
+                        <option value="IRCTC">IRCTC</option>
+                      </select>
                     </div>
-
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        Last name
+                        Type of Contract
                       </label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={formData.lastName}
+                      <select
+                        name="typeofcontract"
+                        value={formData.typeofcontract}
                         onChange={handleChange}
-                        placeholder="Enter your last name"
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                      />
+                      >
+                        <option value="" disabled>Type of Contract</option>
+                        <option value="On board Catering">On board Catering</option>
+                        <option value="On board Non–Catering">On board Non–Catering</option>
+                        <option value="PF permit">PF permit</option>
+                        <option value="Static Unit">Static Unit</option>
+                      </select>
                     </div>
                   </div>
-
-                  <div className="mb-4.5">
+                  <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      Email <span className="text-meta-1">*</span>
+                      Contract Period From
                     </label>
                     <input
-                      type="text"
-                      name="email"
-                      value={formData.email}
+                      type="date"
+                      name="ContractperiodFrom"
+                      value={formData.ContractperiodFrom}
                       onChange={handleChange}
-                      placeholder="Enter your email"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-
-                  <div className="mb-4.5">
+                  <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      Password <span className="text-meta-1">*</span>
+                      Contract Period To
                     </label>
                     <input
-                      type="password"
-                      name="password"
-                      value={formData.password}
+                      type="date"
+                      name="ContractperiodTo"
+                      value={formData.ContractperiodTo}
                       onChange={handleChange}
-                      placeholder="Enter your password"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      Designation
+                      Licensee Name
                     </label>
                     <input
                       type="text"
-                      name="designation"
-                      value={formData.designation}
+                      name="Licenseename"
+                      value={formData.Licenseename}
                       onChange={handleChange}
-                      placeholder="Enter your designation"
+                      placeholder="Enter Licensee Name"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
-
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
-                      Invigilator
+                      Licensee Contact Details
                     </label>
                     <input
                       type="text"
-                      name="invigilator"
-                      value={formData.invigilator}
+                      name="Licenseecontactdetails"
+                      value={formData.Licenseecontactdetails}
                       onChange={handleChange}
-                      placeholder="Enter invigilator"
+                      placeholder="Enter Licensee Contact Details"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Vendors Permitted
+                    </label>
+                    <input
+                      type="number"
+                      name="VendorsPermitted"
+                      value={formData.VendorsPermitted}
+                      onChange={handleChange}
+                      placeholder="Enter Vendors Permitted"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Is Station Service
+                    </label>
+                    <input
+                      type="text"
+                      name="IsStationService"
+                      value={formData.IsStationService}
+                      onChange={handleChange}
+                      placeholder="Enter Is Station Service"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Station Name
+                    </label>
+                    <input
+                      type="text"
+                      name="StationName"
+                      value={formData.StationName}
+                      onChange={handleChange}
+                      placeholder="Enter Station Name"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      PF Permitted
+                    </label>
+                    <input
+                      type="text"
+                      name="PFPermitted"
+                      value={formData.PFPermitted}
+                      onChange={handleChange}
+                      placeholder="Enter PF Permitted"
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
@@ -176,20 +238,19 @@ const options = {
                     <label className="mb-2.5 block text-black dark:text-white">
                       Upload Profile Pic
                     </label>
-                      <UploadButton
-                          options={options}
-                          onComplete={(files) =>
-                            setProfilePic(files.map((x) => x.fileUrl).join("\n"))
-                          }
-                        >
-    {({onClick}) =>
-      <button onClick={onClick}>
-        Upload a file...
-      </button>
-    }
-  </UploadButton>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setProfilePic(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button onClick={onClick}>
+                          Upload a file...
+                        </button>
+                      }
+                    </UploadButton>
                   </div>
-            
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
@@ -201,7 +262,6 @@ const options = {
             </div>
           </div>
         </div>
-
         {success && qrCodeValue && (
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
             <QRCode style={{ margin: '10px 0' }} value={qrCodeValue} />
