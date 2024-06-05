@@ -47,7 +47,7 @@ export default function AddContractor() {
     }
     const updatedFormData = { ...formData, qrcode: result };
 
-    let result2 = clientUrl + `/contractorDetails/${result}`;
+    let result2 = clientUrl + `/#/contractorDetails/${result}`;
     
     setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
