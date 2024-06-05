@@ -10,7 +10,7 @@ const {
 } = require("../Controller/InvigilatorController");
 
 router.get("/fetchInvigilatorData", fetchInvigilatorData);
-router.get("/fetchInvigilatorDataByQR", fetchInvigilatorDataByQRCode);
+router.post("/fetchInvigilatorDataByQR", fetchInvigilatorDataByQRCode);
 router.post("/invigilatorlogin", InvigilatorLogin);
 router.post("/registerinvigilator", registerInvigilator);
 router.put("/update/", updateInvigilator); 
