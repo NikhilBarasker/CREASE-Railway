@@ -3,12 +3,15 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ContractorDetails = () => {
+
+  // const baseUrl = process.env.REACT_APP_API_BASE_URL
+  const baseUrl = "https://crease-railway.onrender.com"
   const { qrcode } = useParams();
   const [contractorData, setContractorData] = useState(null);
 
   const getUser = async () => {
     try {
-      let response = await axios.post('http://localhost:3000/contractor/fetchcontractordata', { qrcode });
+      let response = await axios.post(baseUrl+'/contractor/fetchcontractordata', { qrcode });
       setContractorData(response.data.user);
     } catch (error) {
       console.error('Error fetching contractor data:', error);

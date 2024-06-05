@@ -1,16 +1,15 @@
-
-import { Link } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
+import React, { useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { UploadButton } from "@bytescale/upload-widget-react";
 import QRCode from 'qrcode.react';
-import { useState } from 'react';
 import axios from 'axios';
 
-
-
 export default function AddContractor() {
+  const baseUrl = "https://crease-railway.onrender.com";
+  // const baseUrl = process.env.REACT_APP_API_BASE_URL;
+  // const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
+  const clientUrl = "http://localhost:5173"
+
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
   const [qrCodeValue, setQRCodeValue] = useState('error');
@@ -48,8 +47,7 @@ export default function AddContractor() {
     }
     const updatedFormData = { ...formData, qrcode: result };
 
-    // let result2 = `https://www.youtube.com/`; // Replace with your dynamic URL
-    let result2 = `http://localhost:5173/contractorDetails/${result}`;
+    let result2 = clientUrl + `/contractorDetails/${result}`;
     
     setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
@@ -60,7 +58,7 @@ export default function AddContractor() {
   const handleSave = async () => {
     try {
       if (generatedData) {
-        const response = await axios.post('http://localhost:3000/contractor/registercontractor', generatedData);
+        const response = await axios.post(baseUrl + '/contractor/registercontractor', generatedData);
         if (response) {
           console.log(response);
           setSuccess(false);
