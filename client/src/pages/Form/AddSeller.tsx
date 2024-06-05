@@ -7,7 +7,10 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import axios from 'axios';
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://crease-railway.onrender.com";
+// const baseUrl = process.env.REACT_APP_API_BASE_URL;
+// const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
+const clientUrl = "http://crease-railway-8njx.vercel.app"
 
 export default function AddSeller() {
   const [profilePic, setProfilePic] = useState("");
@@ -21,7 +24,7 @@ export default function AddSeller() {
     designation: '',
     contractor: '',
     qrcode: '',
-    profilePic:'',
+    profilePic: '',
   });
 
   const [generatedData, setGeneratedData] = useState(null);
@@ -41,29 +44,32 @@ export default function AddSeller() {
       result += characters.charAt(randomIndex);
     }
     const updatedFormData = { ...formData, qrcode: result };
-    setQRCodeValue(result);
+
+    let result2 = clientUrl + `/#/contractorDetails/${result}`;
+
+    setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
-    setSuccess(true); 
+    setSuccess(true);
     setProfilePic(profilePic);
   };
 
   const handleSave = async () => {
     try {
       if (generatedData) {
-        
-        const response = await axios.post(baseUrl+'/registerseller', generatedData);
+
+        const response = await axios.post(baseUrl + '/seller/registerseller', generatedData);
         if (response) {
           console.log(response);
-          setSuccess(false); 
+          setSuccess(false);
         }
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-const options = {
-        apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
-        maxFileCount: 1
+  const options = {
+    apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v",
+    maxFileCount: 1
   };
   formData.profilePic = profilePic;
   console.log('xxxx', formData);
@@ -178,20 +184,20 @@ const options = {
                     <label className="mb-2.5 block text-black dark:text-white">
                       Upload Profile Pic
                     </label>
-                      <UploadButton
-                          options={options}
-                          onComplete={(files) =>
-                            setProfilePic(files.map((x) => x.fileUrl).join("\n"))
-                          }
-                        >
-    {({onClick}) =>
-      <button onClick={onClick}>
-        Upload a file...
-      </button>
-    }
-  </UploadButton>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setProfilePic(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button onClick={onClick}>
+                          Upload a file...
+                        </button>
+                      }
+                    </UploadButton>
                   </div>
-            
+
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"

@@ -5,16 +5,12 @@ import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
-import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
-import FormElements from './pages/Form/FormElements';
-import FormLayout from './pages/Form/FormLayout';
+import FormLayout from './pages/Form/Vender';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Login from './pages/Login'
-import Alerts from './pages/UiElements/Alerts';
-import Buttons from './pages/UiElements/Buttons';
 import PrivateRoutes from './components/PrivateRoutes';
 import AddContractor from './pages/Form/AddContractor';
 import AddSeller from './pages/Form/AddSeller';
@@ -22,6 +18,7 @@ import EditInvigilator from './pages/Form/EditInvigilator';
 import TableTwo from './components/Tables/TableTwo';
 import Admin from './pages/Form/Admin';
 import ContractorDetails from './pages/Form/ContractorDetails'
+import VenderDetails from './pages/Form/VenderDetails';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -176,6 +173,15 @@ function App() {
           element={
             <>
               <ContractorDetails/>
+            </>
+          }
+        />
+
+        <Route
+          path="/venderDetails/:qrcode"
+          element={
+            <>
+              <VenderDetails/>
             </>
           }
         />

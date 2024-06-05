@@ -7,10 +7,16 @@ import axios from 'axios';
   
 const FormLayout = () => {
 
-  // const baseUrl = process.env.API_BASE_URL;
+  // const baseUrl = "https://crease-railway.onrender.com";
   const baseUrl = "http://localhost:3000";
+  // const baseUrl = process.env.REACT_APP_API_BASE_URL;
+  // const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
+  const clientUrl = "http://crease-railway-8njx.vercel.app"
 
   const [profilePic, setProfilePic] = useState("");
+  const [aadharCard, setAadharCard] = useState("");
+  const [policeVarificationDocument, setPoliceVarificationDocument] = useState("");
+  const [madicalValidityDocument, setMadicalValidityDocument] = useState("");
   const [success, setSuccess] = useState(false);
   const [qrCodeValue, setQRCodeValue] = useState('');
   const [formData, setFormData] = useState({
@@ -25,7 +31,7 @@ const FormLayout = () => {
     medicalValidityDate: '',
     madicalValidityDocument: '',
     validityAuthority: '',
-    qrCodeValue:'',
+    qrcode:'',
   });
 
   const [generatedData, setGeneratedData] = useState(null);
@@ -44,18 +50,28 @@ const FormLayout = () => {
       const randomIndex = Math.floor(Math.random() * charactersLength);
       result += characters.charAt(randomIndex);
     }
-    setQRCodeValue(result);
     const updatedFormData = { ...formData, qrcode: result };
+
+    let result2 = clientUrl + `/#/venderDetails/${result}`;
+
+
+    setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
     setSuccess(true); 
+
     setProfilePic(profilePic);
+    setAadharCard(aadharCard);
+    setPoliceVarificationDocument(policeVarificationDocument);
+    setMadicalValidityDocument(madicalValidityDocument);
     console.log('Generated QR Code:', result);
   };
 
-  const handleSave = async () => {
-    if (Object.values(formData).some(value => value === '')) {
-      console.log(formData);
+  const handleSave = async (e) => {
+    e.preventDefault()
+    if (Object.values(generatedData).some(value => value === '')) {
+      console.log(generatedData);
       alert('Any of the fields is empty');
+      return
     } else {
       try {
         console.log('Submitting formData:', generatedData);
@@ -73,6 +89,9 @@ const FormLayout = () => {
   };
 
   formData.profilePic = profilePic;
+  formData.aadharCard = aadharCard;
+  formData.madicalValidityDocument = madicalValidityDocument;
+  formData.policeVarificationDocument = policeVarificationDocument
 
   return (
     <DefaultLayout>
@@ -144,45 +163,61 @@ const FormLayout = () => {
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   />
                 </div>
+
                 <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Aadhar Card <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    name="aadharCard"
-                    value={formData.aadharCard}
-                    onChange={handleChange}
-                    placeholder="Enter your Aadhar number"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Police Varification Document <span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    name="policeVarificationDocument"
-                    value={formData.policeVarificationDocument}
-                    onChange={handleChange}
-                    placeholder="Enter your Aadhar number"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
-                <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Medical Varification Document<span className="text-meta-1">*</span>
-                  </label>
-                  <input
-                    type="file"
-                    name="madicalValidityDocument"
-                    value={formData.madicalValidityDocument}
-                    onChange={handleChange}
-                    placeholder="Enter your Aadhar number"
-                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                  />
-                </div>
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload Aadhar Pic
+                    </label>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setAadharCard(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button onClick={onClick}>
+                          Upload a file...
+                        </button>
+                      }
+                    </UploadButton>
+                  </div>
+
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload PoliceVarification Document
+                    </label>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setPoliceVarificationDocument(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button onClick={onClick}>
+                          Upload a file...
+                        </button>
+                      }
+                    </UploadButton>
+                  </div>
+
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload MadicalValidity Document
+                    </label>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setMadicalValidityDocument(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button onClick={onClick}>
+                          Upload a file...
+                        </button>
+                      }
+                    </UploadButton>
+                  </div>
+
                 <div className="w-full xl:w-1/2">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Police Varification Date
@@ -240,7 +275,7 @@ const FormLayout = () => {
                   <button onClick={generateQRCode} className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
                   Generate Qr Code
                 </button>
-                {success && (
+                {success && qrCodeValue && (
                   <div style={{ textAlign: 'center', marginTop: '20px' }}>
                     <QRCode value={qrCodeValue} />
                   </div>

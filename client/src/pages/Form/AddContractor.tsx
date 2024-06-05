@@ -45,13 +45,14 @@ export default function AddContractor() {
       const randomIndex = Math.floor(Math.random() * charactersLength);
       result += characters.charAt(randomIndex);
     }
+    
     const updatedFormData = { ...formData, qrcode: result };
-
     let result2 = clientUrl + `/#/contractorDetails/${result}`;
     
     setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
     setSuccess(true);
+
     setProfilePic(profilePic);
   };
 
