@@ -8,7 +8,7 @@ export default function AddContractor() {
   const baseUrl = "https://crease-railway.onrender.com";
   // const baseUrl = process.env.REACT_APP_API_BASE_URL;
   // const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
-  const clientUrl = "crease-railway-8njx.vercel.app"
+  const clientUrl = "http://crease-railway-8njx.vercel.app"
 
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
@@ -62,11 +62,14 @@ export default function AddContractor() {
         if (response) {
           console.log(response);
           setSuccess(false);
+          alert(`Data saved`)
         }
       }
     } catch (error) {
       console.error('Error:', error);
     }
+    // http://localhost:5173/contractorDetails/K640X3
+    // http://localhost:5173/contractorDetails/ZZL52A
   };
 
   const options = {
