@@ -9,7 +9,7 @@ const {
   fetchSellerDataByQRCode,
 } = require("../Controller/SellerController");
 
-router.get("/fetchsellerdata/:qrcode", fetchSellerDataByQRCode);
+router.post("/fetchsellerdata", fetchSellerDataByQRCode);
 router.post("/registerseller", registerSeller);
 router.put("/update", updateUser);
 router.delete("/delete", deleteUser);

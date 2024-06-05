@@ -6,8 +6,11 @@ const {
   updateInvigilator,
   deleteInvigilator,
   fetchInvigilatorData,
+  fetchInvigilatorDataByQRCode
 } = require("../Controller/InvigilatorController");
+
 router.get("/fetchInvigilatorData", fetchInvigilatorData);
+router.get("/fetchInvigilatorDataByQR", fetchInvigilatorDataByQRCode);
 router.post("/invigilatorlogin", InvigilatorLogin);
 router.post("/registerinvigilator", registerInvigilator);
 router.put("/update/", updateInvigilator); 

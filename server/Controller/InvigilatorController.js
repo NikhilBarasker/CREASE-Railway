@@ -41,6 +41,26 @@
     }
   };
 
+  const fetchInvigilatorDataByQRCode = async (req, res) => {
+    const { qrcode } = req.body;
+    console.log("QR Code:", req.body);
+  
+    try {
+      const user = await Invigilator.findOne({ qrcode });
+  
+      if (user) {
+        res
+          .status(200)
+          .json({ user, message: "User data fetched successfully" });
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      res.status(500).json({ message: "Internal server error", error });
+    }
+  };
+
   const registerInvigilator = async (req, res) => {
     const {
       fname,
@@ -54,13 +74,13 @@
       medicalValidityDate,
       madicalValidityDocument,
       validityAuthority,
+      qrcode,
     } = req.body;
     console.log("rrrrrrr", req.body);
     try {
      
       const existingUser = await Invigilator.findOne({ aadhar });
       if (existingUser) {
-        
         return res.status(400).json({ message: "User already exists" });
       }
 console.log('hi')
@@ -76,6 +96,7 @@ console.log('hi')
         medicalValidityDate,
         madicalValidityDocument,
         validityAuthority,
+        qrcode
       });
       await newUser.save();
 
@@ -133,6 +154,7 @@ console.log('hi')
 
   module.exports = {
     fetchInvigilatorData,
+    fetchInvigilatorDataByQRCode,
     InvigilatorLogin,
     registerInvigilator,
     updateInvigilator,

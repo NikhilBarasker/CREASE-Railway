@@ -104,8 +104,9 @@ clg
 
 
 const fetchSellerDataByQRCode = async (req, res) => {
-  const { qrcode } = req.params;
+  const { qrcode } = req.body;
   console.log("QR Code:", qrcode);
+  console.log("QR Code2:", req.body);
 
   try {
     const user = await Seller.findOne({ qrcode });

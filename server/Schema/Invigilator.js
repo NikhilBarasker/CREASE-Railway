@@ -14,7 +14,7 @@ const model = new mongoose.Schema({
   aadhar: {
     type: Number,
   },
-  aadharPhoto: {
+  aadharCard: {
     type: String,
   },
   policeVarificationDate: {
@@ -23,16 +23,19 @@ const model = new mongoose.Schema({
   policeVarificationDocument: {
     type: String,
   },
-  medicalValidityDate: {
+  madicalValidityDate: {
     type: Date,
   },
-  medicalValidityDocument: {
+  madicalValidityDocument: {
     type: String,
   },
-  validity_of_Authority: {
+  validityAuthority: {
     type: String,
   },
   profilePic: {
+    type: String,
+  },
+  qrcode: {
     type: String,
   },
   Contractor: [
