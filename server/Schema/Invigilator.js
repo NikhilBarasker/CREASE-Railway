@@ -23,7 +23,7 @@ const model = new mongoose.Schema({
   policeVarificationDocument: {
     type: String,
   },
-  madicalValidityDate: {
+  medicalValidityDate: {
     type: Date,
   },
   madicalValidityDocument: {
