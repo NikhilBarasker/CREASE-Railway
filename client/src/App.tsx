@@ -21,6 +21,7 @@ import AddSeller from './pages/Form/AddSeller';
 import EditInvigilator from './pages/Form/EditInvigilator';
 import TableTwo from './components/Tables/TableTwo';
 import Admin from './pages/Form/Admin';
+import ContractorDetails from './pages/Form/ContractorDetails'
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -167,6 +168,14 @@ function App() {
             <>
               <PageTitle title="Signup | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <SignUp />
+            </>
+          }
+        />
+        <Route
+          path="/contractorDetails/:qrcode"
+          element={
+            <>
+              <ContractorDetails/>
             </>
           }
         />

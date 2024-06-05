@@ -107,25 +107,25 @@ const saveQRCode = async (req, res) => {
 };
 
 const fetchContractorDataByQRCode = async (req, res) => {
-  const { qrcode } = req.params;
-  console.log("QR Code:", qrcode);
+  const { qrcode } = req.body;
+  console.log("QR Code:", req.body);
 
   try {
     const user = await Contractor.findOne({ qrcode });
 
     if (user) {
-      const userData = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        designation: user.designation,
-        invigilator: user.invigilator,
-        profilePic: user.profilePic,
-      };
+      // const userData = {
+      //   firstName: user.firstName,
+      //   lastName: user.lastName,
+      //   email: user.email,
+      //   designation: user.designation,
+      //   invigilator: user.invigilator,
+      //   profilePic: user.profilePic,
+      // };
 
       res
         .status(200)
-        .json({ user: userData, message: "User data fetched successfully" });
+        .json({ user, message: "User data fetched successfully" });
     } else {
       res.status(404).json({ message: "User not found" });
     }

@@ -8,12 +8,12 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import axios from 'axios';
 
-const baseUrl = process.env.API_BASE_URL;
+
 
 export default function AddContractor() {
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
-  const [qrCodeValue, setQRCodeValue] = useState('');
+  const [qrCodeValue, setQRCodeValue] = useState('error');
   const [formData, setFormData] = useState({
     agency: '',
     typeofcontract: '',
@@ -26,8 +26,8 @@ export default function AddContractor() {
     IsStationService: '',
     StationName: '',
     PFPermitted: '',
-    qrcode: '',
     profilePic: '',
+    qrcode: '',
   });
 
   const [generatedData, setGeneratedData] = useState(null);
@@ -47,20 +47,23 @@ export default function AddContractor() {
       result += characters.charAt(randomIndex);
     }
     const updatedFormData = { ...formData, qrcode: result };
-    setQRCodeValue(result);
+
+    // let result2 = `https://www.youtube.com/`; // Replace with your dynamic URL
+    let result2 = `http://localhost:5173/contractorDetails/${result}`;
+    
+    setQRCodeValue(result2);
     setGeneratedData(updatedFormData);
-    setSuccess(true); 
+    setSuccess(true);
     setProfilePic(profilePic);
   };
 
   const handleSave = async () => {
     try {
       if (generatedData) {
-        console.log("generatedData : ", generatedData);
-        const response = await axios.post(baseUrl+'/contractor/registercontractor', generatedData);
+        const response = await axios.post('http://localhost:3000/contractor/registercontractor', generatedData);
         if (response) {
           console.log(response);
-          setSuccess(false); 
+          setSuccess(false);
         }
       }
     } catch (error) {
@@ -69,12 +72,11 @@ export default function AddContractor() {
   };
 
   const options = {
-    apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v", 
+    apiKey: "public_12a1yyQ4Dbt9UDABRk4Budpc2L8v",
     maxFileCount: 1
   };
 
   formData.profilePic = profilePic;
-  console.log('xxxx', formData);
 
   return (
     <div>
@@ -262,11 +264,16 @@ export default function AddContractor() {
             </div>
           </div>
         </div>
-        {success && qrCodeValue && (
+        {
+          success && qrCodeValue && (
           <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <QRCode style={{ margin: '10px 0' }} value={qrCodeValue} />
+
+            <QRCode style={{ margin: '10px 0' }} value={qrCodeValue}
+              title="Artifact QR"
+            />
             <button
               onClick={handleSave}
+
               style={{
                 margin: '10px',
                 width: '150px',

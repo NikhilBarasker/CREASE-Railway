@@ -1,16 +1,14 @@
-import { Link } from 'react-router-dom';
-import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import SelectGroupOne from '../../components/Forms/SelectGroup/SelectGroupOne';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { UploadButton } from "@bytescale/upload-widget-react";
 import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-const baseUrl = process.env.API_BASE_URL;
-
+  
 const FormLayout = () => {
+
+  // const baseUrl = process.env.API_BASE_URL;
+  const baseUrl = "http://localhost:3000";
 
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);

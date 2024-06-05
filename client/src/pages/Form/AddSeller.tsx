@@ -7,7 +7,7 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import axios from 'axios';
 
-const baseUrl = process.env.API_BASE_URL;
+const baseUrl = "http://localhost:3000";
 
 export default function AddSeller() {
   const [profilePic, setProfilePic] = useState("");
