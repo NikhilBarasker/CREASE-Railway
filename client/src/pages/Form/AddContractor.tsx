@@ -8,7 +8,7 @@ export default function AddContractor() {
   const baseUrl = "https://crease-railway.onrender.com";
   // const baseUrl = process.env.REACT_APP_API_BASE_URL;
   // const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
-  const clientUrl = "http://localhost:5173"
+  const clientUrl = "crease-railway-8njx.vercel.app"
 
   const [profilePic, setProfilePic] = useState("");
   const [success, setSuccess] = useState(false);
