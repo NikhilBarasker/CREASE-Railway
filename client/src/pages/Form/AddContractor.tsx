@@ -1,76 +1,124 @@
 import React, { useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
-import { UploadButton } from "@bytescale/upload-widget-react";
 import QRCode from 'qrcode.react';
 import axios from 'axios';
+import { UploadButton } from '@bytescale/upload-widget-react';
+import { LiaCheckDoubleSolid } from 'react-icons/lia';
 
 export default function AddContractor() {
+  // const baseUrl = "http://localhost:3000";
   const baseUrl = "https://crease-railway.onrender.com";
-  // const baseUrl = process.env.REACT_APP_API_BASE_URL;
-  // const clientUrl = process.env.REACT_APP_CLIENT_BASE_URL;
-  const clientUrl = "http://crease-railway-8njx.vercel.app"
+  const clientUrl = "http://crease-railway-8njx.vercel.app";
 
-  const [profilePic, setProfilePic] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [Authority, setAuthority] = useState("");
+
+  // const [success, setSuccess] = useState(false);
   const [qrCodeValue, setQRCodeValue] = useState('error');
   const [formData, setFormData] = useState({
     agency: '',
     typeofcontract: '',
     ContractperiodFrom: '',
     ContractperiodTo: '',
-    authority: '',
+    LicenseFeesPaidUptoDate: '',
     Licenseename: '',
+    LicenseeAadharNo: '',
     Licenseecontactdetails: '',
     VendorsPermitted: '',
-    IsStationService: '',
-    StationName: '',
-    PFPermitted: '',
-    profilePic: '',
-    qrcode: '',
+    IsStationService: false,
+    // StationName: '',
+    Authority: '',
+    PFPermitted: [],
+    StationNames: [],
   });
 
   const [generatedData, setGeneratedData] = useState(null);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 6; i++) {
-      const randomIndex = Math.floor(Math.random() * charactersLength);
-      result += characters.charAt(randomIndex);
-    }
-    
-    const updatedFormData = { ...formData, qrcode: result };
-    let result2 = clientUrl + `/#/contractorDetails/${result}`;
-    
-    setQRCodeValue(result2);
-    setGeneratedData(updatedFormData);
-    setSuccess(true);
 
-    setProfilePic(profilePic);
+
+
+  const handleStationChange = (index, field, value) => {
+    const updatedStationNames = [...formData.StationNames];
+    updatedStationNames[index] = { ...updatedStationNames[index], [field]: value };
+    setFormData({ ...formData, StationNames: updatedStationNames });
   };
+
+  const addStation = () => {
+    setFormData({
+      ...formData,
+      StationNames: [...formData.StationNames, { SName: '' }],
+    });
+  };
+
+  const removeStation = (index) => {
+    const updatedStationNames = [...formData.StationNames];
+    updatedStationNames.splice(index, 1);
+    setFormData({ ...formData, StationNames: updatedStationNames });
+  };
+
+
+  const handlePFPermittedChange = (index, field, value) => {
+    const updatedPFPermitted = [...formData.PFPermitted];
+    updatedPFPermitted[index] = { ...updatedPFPermitted[index], [field]: value };
+    setFormData({ ...formData, PFPermitted: updatedPFPermitted });
+  };
+
+  const addPFPermitted = () => {
+    setFormData({
+      ...formData,
+      PFPermitted: [...formData.PFPermitted, { PFPermitted: '' }],
+    });
+  };
+
+  const removePFPermitted = (index) => {
+    const updatedPFPermitted = [...formData.PFPermitted];
+    updatedPFPermitted.splice(index, 1);
+    setFormData({ ...formData, PFPermitted: updatedPFPermitted });
+  };
+
+
+
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  //   let result = '';
+  //   const charactersLength = characters.length;
+  //   for (let i = 0; i < 6; i++) {
+  //     const randomIndex = Math.floor(Math.random() * charactersLength);
+  //     result += characters.charAt(randomIndex);
+  //   }
+
+  //   const updatedFormData = { ...formData, qrcode: result };
+  //   let result2 = clientUrl + `/#/contractorDetails/${result}`;
+
+  //   setQRCodeValue(result2);
+  //   setGeneratedData(updatedFormData);
+  //   setSuccess(true);
+  // };
+
+  // setAuthority(Authority)
 
   const handleSave = async () => {
     try {
-      if (generatedData) {
-        const response = await axios.post(baseUrl + '/contractor/registercontractor', generatedData);
+      setAuthority(Authority)
+      if (formData) {
+        console.log("generatedData ", formData);
+        const response = await axios.post(baseUrl + '/contractor/registercontractor', formData);
         if (response) {
           console.log(response);
-          setSuccess(false);
-          alert(`Data saved`)
+          alert(`Data saved`);
         }
       }
     } catch (error) {
       console.error('Error:', error);
     }
-    // http://localhost:5173/contractorDetails/K640X3
-    // http://localhost:5173/contractorDetails/ZZL52A
   };
 
   const options = {
@@ -78,7 +126,7 @@ export default function AddContractor() {
     maxFileCount: 1
   };
 
-  formData.profilePic = profilePic;
+  formData.Authority = Authority;
 
   return (
     <div>
@@ -93,19 +141,18 @@ export default function AddContractor() {
           className="grid grid-cols-1 gap-9 sm:grid-cols-2"
         >
           <div className="flex flex-col gap-9">
-            {/* <!-- Contact Form --> */}
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
                 <h3 className="font-medium text-black dark:text-white">
                   Register Contractor
                 </h3>
               </div>
-              <form onSubmit={handleSubmit}>
+              <form >
                 <div className="p-6.5">
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">
-                        Contract allotting Agency
+                        Contract allotting Agency <sup className=' text-red-600 text-lg'>*</sup>
                       </label>
                       <select
                         name="agency"
@@ -148,6 +195,8 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
+
+                  {/* Contract Period To */}
                   <div className="w-full xl:w-1/2">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Contract Period To
@@ -160,6 +209,22 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
+
+                  {/* License Fees Paid Upto Date  */}
+                  <div className="w-full xl:w-1/2">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      License Fees Paid Upto Date
+                    </label>
+                    <input
+                      type="date"
+                      name="LicenseFeesPaidUptoDate"
+                      value={formData.LicenseFeesPaidUptoDate}
+                      onChange={handleChange}
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+
+                  {/* Licensee Name */}
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Licensee Name
@@ -173,12 +238,32 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
+
+                  {/* Licensee AadharNo */}
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Licensee Aadhar No.
+                    </label>
+                    <input
+                      type="text"
+                      name="LicenseeAadharNo"
+                      value={formData.LicenseeAadharNo}
+                      onChange={handleChange}
+                      maxLength={12}
+                      minLength={12}
+                      pattern="[0-9]*"
+                      placeholder="Enter Licensee Name"
+                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
+                  </div>
+
+                  {/* Licensee Contact Details */}
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Licensee Contact Details
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       name="Licenseecontactdetails"
                       value={formData.Licenseecontactdetails}
                       onChange={handleChange}
@@ -186,6 +271,28 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
+
+
+                  {/* Upload Authority Pic */}
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Upload Authority Pic
+                    </label>
+                    <UploadButton
+                      options={options}
+                      onComplete={(files) =>
+                        setAuthority(files.map((x) => x.fileUrl).join("\n"))
+                      }
+                    >
+                      {({ onClick }) =>
+                        <button className={` border p-2 rounded ${Authority ? ("border-green-700") : ("pt-3")}`} onClick={onClick}>
+                          {Authority ? (<p className=' flex gap-2'>Uploaded <LiaCheckDoubleSolid className=' text-green-500 font-bold text-2xl' /></p>) : ("Upload a file...")}
+                        </button>
+                      }
+                    </UploadButton>
+                  </div>
+
+                  {/* Vendors Permitted */}
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Vendors Permitted
@@ -199,96 +306,117 @@ export default function AddContractor() {
                       className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
                   </div>
+
+                  {/* Is Station Service */}
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Is Station Service
                     </label>
-                    <input
-                      type="text"
-                      name="IsStationService"
-                      value={formData.IsStationService}
-                      onChange={handleChange}
-                      placeholder="Enter Is Station Service"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
+                    <div className=' flex  gap-16'>
+                      <div>
+                        <input type="radio" id="stationServiceYes" name="IsStationService" value="Yes" checked={formData.IsStationService === "Yes"} style={{ accentColor: 'green' }} onChange={handleChange} className="mr-2 radiobtn" />
+                        <label htmlFor="stationServiceYes">Yes</label>
+                      </div>
+                      <div>
+                        <input type="radio" id="stationServiceNo" name="IsStationService" value="No" checked={formData.IsStationService === "No"} style={{ accentColor: 'green' }} onChange={handleChange} className="mr-2" />
+                        <label htmlFor="stationServiceNo">No</label>
+                      </div>
+                    </div>
                   </div>
+
                   <div className="mb-4.5">
                     <label className="mb-2.5 block text-black dark:text-white">
                       Station Name
                     </label>
-                    <input
-                      type="text"
-                      name="StationName"
-                      value={formData.StationName}
-                      onChange={handleChange}
-                      placeholder="Enter Station Name"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      PF Permitted
-                    </label>
-                    <input
-                      type="text"
-                      name="PFPermitted"
-                      value={formData.PFPermitted}
-                      onChange={handleChange}
-                      placeholder="Enter PF Permitted"
-                      className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-4.5">
-                    <label className="mb-2.5 block text-black dark:text-white">
-                      Upload Profile Pic
-                    </label>
-                    <UploadButton
-                      options={options}
-                      onComplete={(files) =>
-                        setProfilePic(files.map((x) => x.fileUrl).join("\n"))
-                      }
-                    >
-                      {({ onClick }) =>
-                        <button onClick={onClick}>
-                          Upload a file...
+                    {formData.StationNames.map((StationName, index) => (
+                      <div key={index} className="mb-4 flex items-center">
+                        <input
+                          type="text"
+                          value={StationName.SName}
+                          onChange={(e) => handleStationChange(index, 'SName', e.target.value)}
+                          placeholder="Station Name"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        />
+                        {/* <input
+                          type="text"
+                          value={requirement.description}
+                          onChange={(e) => handleStationChange(index, 'description', e.target.value)}
+                          placeholder="Description"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        /> */}
+                        <button
+                          type="button"
+                          onClick={() => removeStation(index)}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                          Remove
                         </button>
-                      }
-                    </UploadButton>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addStation}
+                      className="mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Add Station
+                    </button>
                   </div>
-                  <button
-                    type="submit"
-                    className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
-                  >
+
+                  <div className="mb-4.5">
+                    <label className="mb-2.5 block text-black dark:text-white">
+                      Platforms Permitted
+                    </label>
+                    {formData.PFPermitted.map((PFPermitted, index) => (
+                      <div key={index} className="mb-4 flex items-center">
+                        <input
+                          type="text"
+                          value={PFPermitted.Platform}
+                          onChange={(e) => handlePFPermittedChange(index, 'PFPermitted', e.target.value)}
+                          placeholder="Platform Name"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        />
+                        {/* <input
+                          type="text"
+                          value={requirement.description}
+                          onChange={(e) => handleStationChange(index, 'description', e.target.value)}
+                          placeholder="Description"
+                          className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        /> */}
+                        <button
+                          type="button"
+                          onClick={() => removePFPermitted(index)}
+                          className="ml-2 text-red-500 hover:text-red-700"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={addPFPermitted}
+                      className="mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Add Platform
+                    </button>
+                  </div>
+
+                  {/* <button type="submit" className="mt-4 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Generate QR Code
-                  </button>
+                  </button> */}
                 </div>
               </form>
             </div>
+
+
+            <div className="flex flex-col items-center">
+              {/* <QRCode value={qrCodeValue} /> */}
+              <button onClick={handleSave} className="mt-4 inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                Save
+              </button>
+            </div>
+
           </div>
         </div>
-        {
-          success && qrCodeValue && (
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
-
-            <QRCode style={{ margin: '10px 0' }} value={qrCodeValue}
-              title="Artifact QR"
-            />
-            <button
-              onClick={handleSave}
-
-              style={{
-                margin: '10px',
-                width: '150px',
-                height: '35px',
-                color: 'black',
-                borderRadius: '10px',
-                backgroundColor: 'white'
-              }}
-            >
-              Save to Database
-            </button>
-          </div>
-        )}
       </DefaultLayout>
     </div>
   );

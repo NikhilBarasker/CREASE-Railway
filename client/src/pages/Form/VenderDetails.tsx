@@ -9,7 +9,7 @@ const VenderDetails = () => {
 
     const getUser = async () => {
         try {
-            let response = await axios.post(baseUrl + '/invigilator/fetchInvigilatorDataByQR', { qrcode });
+            let response = await axios.post(baseUrl + '/vendor/fetchInvigilatorDataByQR', { qrcode });
             console.log("response ", response.data.user);
             setInvigilatorData(response.data.user);
         } catch (error) {
