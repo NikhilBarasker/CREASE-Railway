@@ -13,27 +13,42 @@ const contractorSchema = new mongoose.Schema({
   toDate: {
     type: Date,
   },
+  licence_fees_paid_upto: {
+    type: Date,
+  },
   licensee: {
     type: String,
   },
-  Licensee_Contact_details: {
+  LicenseeAadharNo: {
     type: String,
+  },
+  Licensee_Contact_details: {
+    type: Number,
   },
   vendors_permitted: {
     type: Number,
   },
-  stationName: {
+  IsStationService:{
+    type : Boolean
+  },
+  authorityDocument:{
     type: String,
   },
-  pfPermitted: {
-    type: Boolean,
-  },
-  qrcode: {
+  isStationService:{
     type: String,
   },
-  profilePic: {
-    type: String,
-  },
+  stationName: [
+    
+  ],
+  pfPermitted: [
+
+  ],
+  vendors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vendor",
+    },
+  ]
 });
 
 module.exports = mongoose.model("Contractor", contractorSchema);

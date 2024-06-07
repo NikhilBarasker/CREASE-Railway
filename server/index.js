@@ -16,11 +16,11 @@ app.use(
 );
 //localhost:5173/127.0.0.1:3000/contractor/fetchcontractordata/0UBYCF
 http: connectDB();
-const invigilatorRoutes = require("./Routes/InvigilatorRoutes");
+const vendorRoutes = require("./Routes/VendorRoutes");
 const contractorRoutes = require("./Routes/ContractorRoutes");
 const sellerRoutes = require("./Routes/SellerRoutes");
 
-app.use("/invigilator", invigilatorRoutes);
+app.use("/vendor", vendorRoutes);
 app.use("/contractor/", contractorRoutes);
 app.use("/seller", sellerRoutes);
 

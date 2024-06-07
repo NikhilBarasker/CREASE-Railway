@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const {
   InvigilatorLogin,
-  registerInvigilator,
+  registerVendor,
   updateInvigilator,
   deleteInvigilator,
   fetchInvigilatorData,
   fetchInvigilatorDataByQRCode
-} = require("../Controller/InvigilatorController");
+} = require("../Controller/VendorController");
 
 router.get("/fetchInvigilatorData", fetchInvigilatorData);
-router.post("/fetchInvigilatorDataByQR", fetchInvigilatorDataByQRCode);
+router.post("/fetchVendorDataByQR", fetchInvigilatorDataByQRCode);
 router.post("/invigilatorlogin", InvigilatorLogin);
-router.post("/registerinvigilator", registerInvigilator);
+router.post("/registerVendor", registerVendor);
 router.put("/update/", updateInvigilator); 
 router.delete("/delete/:email", deleteInvigilator);
 

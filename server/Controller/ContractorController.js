@@ -8,38 +8,60 @@ const registerContractor = async (req, res) => {
     typeofcontract,
     ContractperiodFrom,
     ContractperiodTo,
-    authority,
     Licenseename,
     Licenseecontactdetails,
     VendorsPermitted,
+    LicenseFeesPaidUptoDate,
+    Authority,
     IsStationService,
-    StationName,
+    StationNames,
     PFPermitted,
-    qrcode,
-    profilePic,
+    LicenseeAadharNo,
   } = req.body;
 
+  console.log("contractor back end ", req.body);
+
   try {
+    if(!agency || !typeofcontract || !ContractperiodFrom || !ContractperiodTo || !Licenseename || !Licenseecontactdetails || !VendorsPermitted || !LicenseFeesPaidUptoDate || !Authority || !IsStationService || !StationNames || !PFPermitted || !LicenseeAadharNo){
+      return res.status(400).json({
+        success: false,
+        message: "All Fields are Mandatory",
+      })
+    }
+
+    const userExist = await Contractor.findOne({LicenseeAadharNo});
+    // console.log("User Exist ",userExist);
+    if(userExist){
+      return res.status(402).json({
+        ExistingContractor: userExist,
+        success: false,
+        message: "User alredy Exist",
+      })
+    }
+
     const newContractor = new Contractor({
       agency,
       category: typeofcontract, // Assuming category maps to typeofcontract
       fromDate: ContractperiodFrom,
       toDate: ContractperiodTo,
       licensee: Licenseename,
+      licence_fees_paid_upto:LicenseFeesPaidUptoDate,
       Licensee_Contact_details: Licenseecontactdetails,
       vendors_permitted: VendorsPermitted,
-      stationName: StationName,
+      stationName: StationNames,
       pfPermitted: PFPermitted,
-      qrcode,
-      profilePic,
+      licence_fees_paid_upto:LicenseFeesPaidUptoDate,
+      isStationService : IsStationService,
+      authorityDocument:Authority,
+      LicenseeAadharNo
     });
 
-    await newContractor.save();
+    const data = await newContractor.save();
 
-    res.status(201).json({ message: "Contractor registered successfully" });
+    res.status(200).json({success:true, data, message: "Contractor registered successfully" });
   } catch (error) {
     console.error("Error saving contractor:", error);
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ success: false, message: "Internal server error", error });
   }
 };
 

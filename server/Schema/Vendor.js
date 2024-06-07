@@ -38,12 +38,11 @@ const model = new mongoose.Schema({
   qrcode: {
     type: String,
   },
-  Contractor: [
-    {
+  Contractor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contractor",
     },
-  ],
+  
 });
 
-module.exports = mongoose.model("Invigilator", model);
+module.exports = mongoose.model("Vendor", model);
